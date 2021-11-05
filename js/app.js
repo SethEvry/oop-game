@@ -21,3 +21,7 @@ keyboard.addEventListener('click', e => {
         game.handleInteraction(e);
     }
 })
+// events for keyup
+document.addEventListener('keyup', e => {
+    game.handleInteraction(e)
+})

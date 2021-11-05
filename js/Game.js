@@ -59,17 +59,26 @@ class Game {
      */
     handleInteraction(e) {
         const active = this.activePhrase;
-        const letter = e.target;
-        letter.setAttribute('disabled', true);
-        if(active.phrase.includes(letter.textContent)){
-            letter.classList.add('chosen');
-            active.showMatchedLetter(letter.textContent);
+        // add functionality for keyup
+        const letter = e.type === 'click' ? e.target.textContent : e.key;
+        const keys = document.getElementsByClassName("key");
+        //finds element becayse keyup event doesn't specifically target one
+        let target;
+        for(let key of keys){
+            if(key.textContent === letter){
+            target = key;
+            }
+        }
+        target.setAttribute('disabled', true);
+        if(active.phrase.includes(letter)){
+            target.classList.add('chosen');
+            active.showMatchedLetter(letter);
             if(this.checkForWin()){
                 this.gameOver("You Win!", true)
             }
  
         } else {
-            letter.classList.add('wrong');
+            target.classList.add('wrong');
             this.removeLife();
         }
 
