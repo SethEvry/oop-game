@@ -3,24 +3,44 @@
  * Phrase.js */
 class Phrase{
     constructor(phrase){
-        this.phrase = phrase.tolowerCase();
+        this.phrase = phrase.toLowerCase();
 
     }
     /**
      * Adds letter placeholders to the display
      * 
      */
-    addPhraseToDisplay(){}
+    addPhraseToDisplay(){
+        let letters = this.phrase.split('');
+        let html = '';
+        letters.forEach(letter => {
+            if(letter === ' '){
+                html += `<li class="space"> </li>`
+            } else {
+                html += `<li class="hide letter ${letter}">${letter}</li>`
+            }
+            
+        })
+        document.getElementById('phrase').innerHTML = html;
+    }
 
     /**
      * Checks to see if the letter selected matches
      */
-    checkLetter(){}
+    checkLetter(letter){
+        return this.phrase.includes(letter);
+    }
 
     /**
      * reveals letter(s) on the board that match the selection
      */
-    showMatchedLetter(){}
+    showMatchedLetter(letter){
+        let letters = document.getElementsByClassName(`letter ${letter}`);
+        for(let rightLetter of letters){  
+            rightLetter.classList.remove('hide');
+            rightLetter.classList.add('show');
+        }
+    }
 
 
 }

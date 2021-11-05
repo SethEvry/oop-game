@@ -4,7 +4,14 @@
 class Game {
     constructor(phrases){
         this.missed = 0;
-        this.phrases = [];
+        this.phrases = [
+            new Phrase('Phrase One'),
+            new Phrase('How be you'),
+            new Phrase('I have to push the pram a lot'),
+            new Phrase('Teach me how to Dougie'),
+            new Phrase('Dont panic')
+        ];
+
         this.activePhrase = null;
     }
 
@@ -14,32 +21,103 @@ class Game {
     startGame() {
         const overlay = document.getElementById('overlay');
         overlay.style.display = 'none';
+        this.activePhrase = this.getRandomPhrase();
+        this.activePhrase.addPhraseToDisplay();
     }
+    /**
+     * HTML classes and attributes to default for the new game.
+     * 
+     */
+    resetGame() {
+        document.getElementById('phrase').innerHTML = '';
+        const keys = document.getElementsByClassName('key');
+        for(let key of keys){
+            key.className = "key";
+            key.removeAttribute('disabled');
+        }
+        const tries = document.getElementsByClassName('tries');
+        for(let attempt of tries ){
+                attempt.firstElementChild.src="images/liveHeart.png";
+            }
+     }
 
     /**
      * retrieves a random phrase from the phrases array
      * 
      * @return {Object} - a Phrase
      */
-    getRandomPhrase() {}
+    getRandomPhrase() {
+        let index = Math.floor(Math.random()*this.phrases.length);
+        return this.phrases[index];
+    }
 
     /**
-     * controls game logic from DOM intercation
+     * controls game logic from DOM interaction
+     * 
+     * @param {Object} event object from click
+     * 
      */
-    handleInteraction() {}
+    handleInteraction(e) {
+        const active = this.activePhrase;
+        const letter = e.target;
+        letter.setAttribute('disabled', true);
+        if(active.phrase.includes(letter.textContent)){
+            letter.classList.add('chosen');
+            active.showMatchedLetter(letter.textContent);
+            if(this.checkForWin()){
+                this.gameOver("You Win!", true)
+            }
+ 
+        } else {
+            letter.classList.add('wrong');
+            this.removeLife();
+        }
+
+    }
     /**
      * takes a life from the scoreboard
      */
-    removeLife() {}
+    removeLife() {
+        this.missed++
+        let tries = document.getElementsByClassName('tries');
+        let li;
+        for(let attempt of tries){
+            if(attempt.firstElementChild.src.includes("images/liveHeart.png")){
+                li = attempt;
+                break;
+            }
+        }
+        li.firstElementChild.src = "images/lostHeart.png";
+        if(this.missed >= 5){
+            this.gameOver("Sorry, You lost!", false)
+        }
+    }
 
     /**
      * checks for win conditions
+     * 
+     * @returns {Boolean}
      */
-    checkForWin() {}
+    checkForWin() {
+        let elements = document.getElementsByClassName('letter');
+        for(let element of elements){
+            if(element.className.includes("hide")){
+                return false;
+            }
+        }
+        return true;
+    }
 
     /**
      * ends the game and display start screen
+     * 
+     * @params {String, Boolean} An end screen message, and a boolean marking win/loss status.
      */
-    gameOver() {}
-
+    gameOver(message, status) {
+        const overlay = document.getElementById('overlay');
+        overlay.style.display = 'block';
+        overlay.className = status ? 'win' : 'lose';
+        document.getElementById('game-over-message').textContent = message;
+        this.resetGame();
+    }
 }
