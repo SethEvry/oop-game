@@ -12,15 +12,16 @@ class Phrase{
      */
     addPhraseToDisplay(){
         let letters = this.phrase.split('');
-        let html = '';
+        let html = '<div class="word">';
         letters.forEach(letter => {
             if(letter === ' '){
-                html += `<li class="space"> </li>`
+                html += `</div><li class="space"> </li><div class="word">`
             } else {
                 html += `<li class="hide letter ${letter}">${letter}</li>`
             }
             
         })
+        html += '</div>'
         document.getElementById('phrase').innerHTML = html;
     }
 
