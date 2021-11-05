@@ -11,7 +11,10 @@ class Game {
     /**
      * initializes the game
      */
-    startGame() {}
+    startGame() {
+        const overlay = document.getElementById('overlay');
+        overlay.style.display = 'none';
+    }
 
     /**
      * retrieves a random phrase from the phrases array
@@ -38,5 +41,5 @@ class Game {
      * ends the game and display start screen
      */
     gameOver() {}
-    
+
 }
