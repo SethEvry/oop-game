@@ -5,7 +5,7 @@ class Game {
     constructor(phrases){
         this.missed = 0;
         this.phrases = [
-            new Phrase('Phrase One'),
+            new Phrase('All your base are belong to us'),
             new Phrase('How be you'),
             new Phrase('I have to push the pram a lot'),
             new Phrase('Teach me how to Dougie'),
@@ -13,6 +13,7 @@ class Game {
         ];
 
         this.activePhrase = null;
+        this.playing = false;
     }
 
     /**
@@ -23,6 +24,7 @@ class Game {
         overlay.style.display = 'none';
         this.activePhrase = this.getRandomPhrase();
         this.activePhrase.addPhraseToDisplay();
+        this.playing = true;
     }
     /**
      * HTML classes and attributes to default for the new game.
@@ -58,28 +60,30 @@ class Game {
      * 
      */
     handleInteraction(e) {
-        const active = this.activePhrase;
-        // add functionality for keyup
-        const letter = e.type === 'click' ? e.target.textContent : e.key;
-        const keys = document.getElementsByClassName("key");
-        //finds element becayse keyup event doesn't specifically target one
-        let target;
-        for(let key of keys){
-            if(key.textContent === letter){
-            target = key;
+        if(this.playing){
+            const active = this.activePhrase;
+            // add functionality for keyup
+            const letter = e.type === 'click' ? e.target.textContent : e.key;
+            const keys = document.getElementsByClassName("key");
+            //finds element becayse keyup event doesn't specifically target one
+            let target;
+            for(let key of keys){
+                if(key.textContent === letter){
+                target = key;
+                }
             }
-        }
-        target.setAttribute('disabled', true);
-        if(active.phrase.includes(letter)){
-            target.classList.add('chosen');
-            active.showMatchedLetter(letter);
-            if(this.checkForWin()){
-                this.gameOver("You Win!", true)
+            target.setAttribute('disabled', true);
+            if(active.checkLetter(letter)){
+                target.classList.add('chosen');
+                active.showMatchedLetter(letter);
+                if(this.checkForWin()){
+                    this.gameOver("You Win!", true)
+                }
+            //prevent player from continually typing wrong answer
+            } else if(!target.className.includes('wrong')){
+                target.classList.add('wrong');
+                this.removeLife();
             }
- 
-        } else {
-            target.classList.add('wrong');
-            this.removeLife();
         }
 
     }
@@ -97,6 +101,10 @@ class Game {
             }
         }
         li.firstElementChild.src = "images/lostHeart.png";
+        document.querySelector('.main-container').classList.add('red-flash');
+        setTimeout(() => {
+            document.querySelector('.main-container').classList.remove('red-flash');
+        }, 100)
         if(this.missed >= 5){
             this.gameOver("Sorry, You lost!", false)
         }
@@ -127,6 +135,7 @@ class Game {
         overlay.style.display = 'block';
         overlay.className = status ? 'win' : 'lose';
         document.getElementById('game-over-message').textContent = message;
+        this.playing = false;
         this.resetGame();
     }
 }

@@ -10,7 +10,7 @@
   --color-neutral: #445069;
   --color-neutral-light: #D2D2D2;
   --color-keys: #37474F;
-  --color-keys-light: #E5E5E5;
+  --color-keys-light: #ffffff;
   --font-size-large: 60px;
   --font-size-medium: 20px;
   --transition: all .2s ease-in-out;
@@ -91,7 +91,10 @@ button {
 
 
 /* Phrase */
-
+#phrase {
+  background-color: #3a3f58;
+  box-shadow: 10px 10px 5px #2f3347;
+}
 .letter {
   font-size: var(--font-size-medium);
   height: 65px;
@@ -112,9 +115,6 @@ button {
   margin-bottom: 10px;
 }
 
-
-
-
 .show {
   color: #fff;
   background-color: #4ac0d5;
@@ -131,9 +131,20 @@ button {
 
 /* Keyboard */
 
+#qwerty{
+  background-color: #d2d2d2ea;
+  border: 2px solid #c7c7c7;
+  max-width: 640px;
+  margin: 0 auto; 
+}
+
 .keyrow {
   display: flex;
   justify-content: center;
+}
+
+.key:hover {
+  box-shadow: inset 0px 0px 5px #c2c2c2;
 }
 
 .chosen {
@@ -172,7 +183,7 @@ button {
   display: flex;
   flex-direction: column;
   position: fixed;
-  color: #FFFFFF;
+  color: #ffffffc5;
   justify-content: center;
   top: 0;
   bottom: 0;
@@ -207,4 +218,13 @@ button {
 
 .lose a {
   color: var(--color-lose);
+}
+
+.warning {
+  margin-top: 40px;
+}
+
+/* Red Flash */
+.red-flash{
+  background-color: red;
 }
